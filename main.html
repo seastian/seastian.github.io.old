@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>seastianLabs</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var rightPressed = false;
+        var leftPressed = false;
+        var upPressed = false;
+        var downPressed = false;
+        var L1 = 100;
+        var L2 = 50;
+        var A1 = 0;
+        var A2 = 0;
+        var Pos1x = L1 * Math.cos(A1);
+        var Pos1y = L1 * Math.sin(A1);
+        var Pos2x = L2 * Math.cos(A2);
+        var Pos2y = L2 * Math.sin(A2);
+
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+
+        function keyDownHandler(e) {
+            if (e.keyCode == 39) {
+                rightPressed = true;
+            } else if (e.keyCode == 37) {
+                leftPressed = true;
+            } else if (e.keyCode == 38) {
+                upPressed = true;
+            } else if (e.keyCode == 40) {
+                downPressed = true;
+            }
+        }
+
+        function keyUpHandler(e) {
+            if (e.keyCode == 39) {
+                rightPressed = false;
+            } else if (e.keyCode == 37) {
+                leftPressed = false;
+            } else if (e.keyCode == 38) {
+                upPressed = false;
+            } else if (e.keyCode == 40) {
+                downPressed = false;
+            }
+        }
+
+        function drawBrazo1() {
+            Pos1x = L1 * Math.cos(A1);
+            Pos1y = L1 * Math.sin(A1);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(Pos1x, Pos1y);
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        function drawBrazo2() {
+            Pos2x = L2 * Math.cos(A2);
+            Pos2y = L2 * Math.sin(A2);
+            ctx.beginPath();
+            ctx.moveTo(Pos1x, Pos1y);
+            ctx.lineTo(Pos1x + Pos2x, Pos1y + Pos2y);
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBrazo1();
+            drawBrazo2();
+            if (rightPressed) {
+                A1 += 0.01;
+            }
+            if (leftPressed) {
+                A1 -= 0.01;
+            }
+            if (upPressed) {
+                A2 += 0.01;
+            }
+            if (downPressed) {
+                A2 -= 0.01;
+            }
+
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+
+</body>
+
+</html>
